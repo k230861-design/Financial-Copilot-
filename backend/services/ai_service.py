@@ -8,6 +8,7 @@ from config import GROQ_API_KEY, LLM_MODEL
 groq_client = AsyncOpenAI(
     api_key=GROQ_API_KEY,
     base_url="https://api.groq.com/openai/v1",
+    timeout=30.0,
 )
 
 

@@ -189,7 +189,6 @@ async def list_transactions(
             "entity_id": tx["entity_id"],
             "entity_name": tx.get("entities", {}).get("name", "") if tx.get("entities") else "",
             "entity_type": tx.get("entities", {}).get("entity_type", "") if tx.get("entities") else "",
-            "payment_method": tx.get("payment_method", ""),
             "created_at": tx["created_at"],
         }
         transactions.append(flat)
@@ -248,8 +247,6 @@ async def create_transaction(body: TransactionCreate, user: dict = Depends(get_c
         "category_id": category_id,
         "entity_id": entity_id,
     }
-    if body.payment_method:
-        tx_data["payment_method"] = body.payment_method
     result = client.table("transactions").insert(tx_data).execute()
 
     if not result.data:
@@ -333,8 +330,6 @@ async def upload_csv(
             "category_id": category_id,
             "entity_id": entity_id,
         }
-        if tx.get("payment_method"):
-            tx_record["payment_method"] = tx["payment_method"]
         inserted.append(tx_record)
 
     # Process corrected transactions
@@ -354,8 +349,6 @@ async def upload_csv(
             "category_id": correction.get("category_id"),
             "entity_id": entity_id,
         }
-        if tx_data.get("payment_method"):
-            tx_record["payment_method"] = tx_data["payment_method"]
         inserted.append(tx_record)
 
     # Bulk insert
@@ -376,107 +369,127 @@ async def process_csv_text(
     user: dict = Depends(get_current_user),
 ):
     """Process CSV text content (sent as JSON body) and insert transactions."""
+    import traceback as _tb
+
     business_id = body.get("business_id")
     csv_text = body.get("csv_text", "")
     
     if not business_id or not csv_text:
         raise HTTPException(status_code=400, detail="business_id and csv_text required")
 
-    client = get_authenticated_client(user["access_token"])
+    try:
+        client = get_authenticated_client(user["access_token"])
 
-    # Verify business
-    biz = client.table("businesses").select("id").eq("id", business_id).eq("user_id", user["id"]).execute()
-    if not biz.data:
-        raise HTTPException(status_code=404, detail="Business not found")
+        # Verify business
+        biz = client.table("businesses").select("id").eq("id", business_id).eq("user_id", user["id"]).execute()
+        if not biz.data:
+            raise HTTPException(status_code=404, detail="Business not found")
 
-    raw_txs = parse_csv_content(csv_text)
-    if not raw_txs:
-        raise HTTPException(status_code=400, detail="No valid transactions found in CSV")
+        raw_txs = parse_csv_content(csv_text)
+        if not raw_txs:
+            raise HTTPException(status_code=400, detail="No valid transactions found in CSV")
 
-    # Load user corrections
-    corrections = client.table("user_corrections").select("*").eq("business_id", business_id).execute()
-    correction_map = {}
-    for c in corrections.data:
-        if c.get("description_pattern"):
-            correction_map[c["description_pattern"].lower()] = c
+        # Load user corrections (gracefully handle if table doesn't exist)
+        correction_map = {}
+        try:
+            corrections = client.table("user_corrections").select("*").eq("business_id", business_id).execute()
+            for c in corrections.data:
+                if c.get("description_pattern"):
+                    correction_map[c["description_pattern"].lower()] = c
+        except Exception as corr_err:
+            print(f"[WARN] Could not load user_corrections: {corr_err}")
 
-    needs_ai = []
-    corrected = []
-    for tx in raw_txs:
-        desc_lower = tx["description"].lower()
-        matched = None
-        for pattern, correction in correction_map.items():
-            if pattern in desc_lower:
-                matched = correction
-                break
-        if matched:
-            corrected.append({**tx, "_correction": matched})
-        else:
-            needs_ai.append(tx)
+        needs_ai = []
+        corrected = []
+        for tx in raw_txs:
+            desc_lower = tx["description"].lower()
+            matched = None
+            for pattern, correction in correction_map.items():
+                if pattern in desc_lower:
+                    matched = correction
+                    break
+            if matched:
+                corrected.append({**tx, "_correction": matched})
+            else:
+                needs_ai.append(tx)
 
-    # Batch AI classification
-    ai_results = []
-    batch_size = 30
-    for i in range(0, len(needs_ai), batch_size):
-        batch = needs_ai[i:i + batch_size]
-        batch_results = await classify_transactions_batch(batch)
-        ai_results.extend(batch_results)
+        # Batch AI classification (with fallback on failure)
+        ai_results = []
+        batch_size = 30
+        for i in range(0, len(needs_ai), batch_size):
+            batch = needs_ai[i:i + batch_size]
+            try:
+                batch_results = await classify_transactions_batch(batch)
+                ai_results.extend(batch_results)
+            except Exception as ai_err:
+                print(f"[WARN] AI classification failed for batch: {ai_err}")
+                # Fallback: basic classification without AI
+                for tx in batch:
+                    is_expense = tx["amount"] < 0
+                    ai_results.append({
+                        "category": "Miscellaneous" if is_expense else "Other Income",
+                        "entity_name": "",
+                        "entity_type": "supplier" if is_expense else "customer",
+                        "tags": [],
+                    })
 
-    inserted = []
-    
-    for i, tx in enumerate(needs_ai):
-        cls = ai_results[i] if i < len(ai_results) else {}
-        tx_type = "expense" if tx["amount"] < 0 else "income"
+        inserted = []
         
-        category_name = cls.get("category", "Miscellaneous" if tx_type == "expense" else "Other Income")
-        entity_name = cls.get("entity_name", "")
-        entity_type = cls.get("entity_type", "supplier" if tx_type == "expense" else "customer")
-        
-        category_id = await get_or_create_category(client, category_name, tx_type)
-        entity_id = await get_or_create_entity(client, entity_name, entity_type, business_id) if entity_name else None
+        for i, tx in enumerate(needs_ai):
+            cls = ai_results[i] if i < len(ai_results) else {}
+            tx_type = "expense" if tx["amount"] < 0 else "income"
+            
+            category_name = cls.get("category", "Miscellaneous" if tx_type == "expense" else "Other Income")
+            entity_name = cls.get("entity_name", "")
+            entity_type = cls.get("entity_type", "supplier" if tx_type == "expense" else "customer")
+            
+            category_id = await get_or_create_category(client, category_name, tx_type)
+            entity_id = await get_or_create_entity(client, entity_name, entity_type, business_id) if entity_name else None
 
-        tx_record = {
-            "business_id": business_id,
-            "date": tx["date"],
-            "description": tx["description"],
-            "amount": tx["amount"],
-            "type": tx_type,
-            "category_id": category_id,
-            "entity_id": entity_id,
-        }
-        if tx.get("payment_method"):
-            tx_record["payment_method"] = tx["payment_method"]
-        inserted.append(tx_record)
+            tx_record = {
+                "business_id": business_id,
+                "date": tx["date"],
+                "description": tx["description"],
+                "amount": tx["amount"],
+                "type": tx_type,
+                "category_id": category_id,
+                "entity_id": entity_id,
+            }
+            inserted.append(tx_record)
 
-    for tx_data in corrected:
-        correction = tx_data.pop("_correction")
-        tx_type = "expense" if tx_data["amount"] < 0 else "income"
-        entity_name = correction.get("entity_name", "")
-        entity_type = "supplier" if tx_type == "expense" else "customer"
-        entity_id = await get_or_create_entity(client, entity_name, entity_type, business_id) if entity_name else None
+        for tx_data in corrected:
+            correction = tx_data.pop("_correction")
+            tx_type = "expense" if tx_data["amount"] < 0 else "income"
+            entity_name = correction.get("entity_name", "")
+            entity_type = "supplier" if tx_type == "expense" else "customer"
+            entity_id = await get_or_create_entity(client, entity_name, entity_type, business_id) if entity_name else None
 
-        tx_record = {
-            "business_id": business_id,
-            "date": tx_data["date"],
-            "description": tx_data["description"],
-            "amount": tx_data["amount"],
-            "type": tx_type,
-            "category_id": correction.get("category_id"),
-            "entity_id": entity_id,
-        }
-        if tx_data.get("payment_method"):
-            tx_record["payment_method"] = tx_data["payment_method"]
-        inserted.append(tx_record)
+            tx_record = {
+                "business_id": business_id,
+                "date": tx_data["date"],
+                "description": tx_data["description"],
+                "amount": tx_data["amount"],
+                "type": tx_type,
+                "category_id": correction.get("category_id"),
+                "entity_id": entity_id,
+            }
+            inserted.append(tx_record)
 
-    if inserted:
-        result = client.table("transactions").insert(inserted).execute()
-        return {
-            "message": f"Successfully processed {len(result.data)} transactions",
-            "count": len(result.data),
-            "transactions": result.data,
-        }
+        if inserted:
+            result = client.table("transactions").insert(inserted).execute()
+            return {
+                "message": f"Successfully processed {len(result.data)} transactions",
+                "count": len(result.data),
+                "transactions": result.data,
+            }
 
-    return {"message": "No transactions to insert", "count": 0, "transactions": []}
+        return {"message": "No transactions to insert", "count": 0, "transactions": []}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        _tb.print_exc()
+        raise HTTPException(status_code=500, detail=f"CSV processing failed: {str(e)}")
 
 
 @router.delete("/{transaction_id}")
