@@ -1,0 +1,24 @@
+# ─── Python ──────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# ─── Node.js ─────────────────────────────
+node_modules/
+dist/
+.wrangler/
+
+# ─── IDE ─────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Logs ────────────────────────────────
+*.log
+npm-debug.log*

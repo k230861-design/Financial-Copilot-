@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Financial Co-Pilot</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="/static/styles.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ LOGIN / LANDING PAGE ═══════════════════════════════ -->
+<div id="login-overlay" class="landing-page">
+
+  <!-- Floating particles background -->
+  <div class="landing-particles">
+    <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
+    <div class="particle p4"></div><div class="particle p5"></div><div class="particle p6"></div>
+  </div>
+
+  <!-- Top navigation bar -->
+  <nav class="landing-nav">
+    <div class="landing-nav-inner">
+      <div class="landing-brand">
+        <div class="landing-brand-icon">🤖</div>
+        <span class="landing-brand-name">FinCopilot</span>
+      </div>
+      <div class="landing-nav-links">
+        <a href="#features" onclick="document.getElementById('landing-features').scrollIntoView({behavior:'smooth'});return false">Features</a>
+        <a href="#how" onclick="document.getElementById('landing-how').scrollIntoView({behavior:'smooth'});return false">How it works</a>
+      </div>
+      <button class="landing-cta-sm" onclick="document.getElementById('landing-auth').scrollIntoView({behavior:'smooth'})">Get Started Free</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="landing-hero">
+    <div class="landing-hero-content">
+      <div class="landing-hero-text">
+        <div class="landing-badge">✨ AI-Powered Financial Intelligence</div>
+        <h1>Your Business Finances,<br><span class="gradient-text">on Autopilot.</span></h1>
+        <p class="landing-hero-sub">Track expenses, forecast cashflow, and get AI-driven insights — all in one beautiful dashboard. Built for micro-business owners who want clarity, not complexity.</p>
+        <div class="landing-hero-actions">
+          <button class="btn-hero-primary" onclick="document.getElementById('landing-auth').scrollIntoView({behavior:'smooth'})">Start Free — No Card Needed</button>
+          <button class="btn-hero-ghost" onclick="document.getElementById('landing-features').scrollIntoView({behavior:'smooth'})">See Features ↓</button>
+        </div>
+        <div class="landing-trust-row">
+          <div class="trust-avatars">
+            <div class="trust-avatar" style="background:linear-gradient(135deg,#6366f1,#a855f7)">A</div>
+            <div class="trust-avatar" style="background:linear-gradient(135deg,#10b981,#06b6d4)">M</div>
+            <div class="trust-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">S</div>
+            <div class="trust-avatar" style="background:linear-gradient(135deg,#3b82f6,#6366f1)">R</div>
+          </div>
+          <span class="trust-text">Trusted by <strong>500+</strong> business owners</span>
+        </div>
+      </div>
+      <div class="landing-hero-visual">
+        <div class="hero-dashboard-mock">
+          <div class="mock-topbar"><span class="mock-dot red"></span><span class="mock-dot yellow"></span><span class="mock-dot green"></span></div>
+          <div class="mock-body">
+            <div class="mock-stat-row">
+              <div class="mock-stat"><div class="mock-stat-label">Revenue</div><div class="mock-stat-val green-text">PKR 842K</div></div>
+              <div class="mock-stat"><div class="mock-stat-label">Expenses</div><div class="mock-stat-val red-text">PKR 523K</div></div>
+              <div class="mock-stat"><div class="mock-stat-label">Net Profit</div><div class="mock-stat-val accent-text">PKR 319K</div></div>
+            </div>
+            <div class="mock-chart">
+              <div class="mock-bar" style="height:45%"></div>
+              <div class="mock-bar" style="height:65%"></div>
+              <div class="mock-bar" style="height:40%"></div>
+              <div class="mock-bar" style="height:80%"></div>
+              <div class="mock-bar" style="height:55%"></div>
+              <div class="mock-bar active" style="height:90%"></div>
+              <div class="mock-bar" style="height:70%"></div>
+            </div>
+            <div class="mock-ai-row">
+              <span class="mock-ai-icon">🤖</span>
+              <span class="mock-ai-text">Your expenses dropped 12% this month — nice work!</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="landing-features" id="landing-features">
+    <div class="landing-section-inner">
+      <div class="landing-section-header">
+        <span class="section-badge">Features</span>
+        <h2>Everything you need to<br><span class="gradient-text">master your money</span></h2>
+        <p>Powerful AI tools designed for real business owners, not accountants.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><span>📊</span></div>
+          <h3>Smart Dashboard</h3>
+          <p>Real-time revenue, expenses, and profit with beautiful charts. No spreadsheets needed.</p>
+        </div>
+        <div class="feature-card featured">
+          <div class="feature-icon-wrap"><span>🤖</span></div>
+          <h3>AI Classification</h3>
+          <p>Upload a CSV and our AI auto-categorizes every transaction — groceries, rent, payroll, and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><span>🔮</span></div>
+          <h3>Cashflow Forecast</h3>
+          <p>Predict next month's cash position with AI-powered projections so you're never caught off-guard.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><span>💬</span></div>
+          <h3>AI CFO Chat</h3>
+          <p>Ask questions like "Am I spending too much on supplies?" and get instant, data-backed answers.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><span>💡</span></div>
+          <h3>Auto Insights</h3>
+          <p>Anomaly detection, recurring pattern alerts, and cost-saving tips generated automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon-wrap"><span>🎯</span></div>
+          <h3>Goals & Scenarios</h3>
+          <p>Set savings goals and simulate "what-if" scenarios to plan your business growth with confidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works Section -->
+  <section class="landing-how" id="landing-how">
+    <div class="landing-section-inner">
+      <div class="landing-section-header">
+        <span class="section-badge">How it works</span>
+        <h2>Up and running in<br><span class="gradient-text">under 2 minutes</span></h2>
+      </div>
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Create Account</h3>
+          <p>Sign up with Google or email. It's free, no credit card required.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Upload Data</h3>
+          <p>Drop a CSV or manually enter transactions. AI handles the rest.</p>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Get Insights</h3>
+          <p>Instant dashboard, forecasts, and AI recommendations — automatically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Auth Section -->
+  <section class="landing-auth-section" id="landing-auth">
+    <div class="landing-section-inner">
+      <div class="auth-wrapper">
+        <div class="auth-info">
+          <h2>Start making smarter<br>financial decisions <span class="gradient-text">today.</span></h2>
+          <p>Join hundreds of business owners using AI to stay on top of their finances.</p>
+          <div class="auth-perks">
+            <div class="perk-item"><span class="perk-check">✓</span> Free forever for small businesses</div>
+            <div class="perk-item"><span class="perk-check">✓</span> No credit card required</div>
+            <div class="perk-item"><span class="perk-check">✓</span> AI insights from day one</div>
+            <div class="perk-item"><span class="perk-check">✓</span> CSV upload & auto-categorization</div>
+            <div class="perk-item"><span class="perk-check">✓</span> Bank-grade security with Supabase</div>
+          </div>
+        </div>
+        <div class="auth-card">
+          <h3 id="auth-card-title">Welcome back</h3>
+          <p id="auth-card-sub" class="auth-card-sub">Sign in to your account to continue</p>
+
+          <!-- Google Login -->
+          <button class="login-google-btn" id="google-login-btn">
+            <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Continue with Google
+          </button>
+          <div class="login-divider"><span>or use email</span></div>
+
+          <!-- Email/Password Login -->
+          <div id="login-form-section">
+            <div class="auth-field">
+              <label>Email</label>
+              <input class="auth-input" type="email" id="login-email" placeholder="you@company.com">
+            </div>
+            <div class="auth-field">
+              <label>Password</label>
+              <input class="auth-input" type="password" id="login-password" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleEmailLogin()">
+            </div>
+            <div id="email-login-error" class="auth-error" style="display:none"></div>
+            <button class="btn-auth-primary" id="email-login-btn" onclick="handleEmailLogin()">Sign In</button>
+            <div class="auth-switch">
+              Don't have an account? <a href="#" onclick="switchToRegister();return false">Create one free</a>
+            </div>
+          </div>
+
+          <!-- Registration Form -->
+          <div id="register-form-section" style="display:none">
+            <div class="auth-field">
+              <label>Email</label>
+              <input class="auth-input" type="email" id="register-email" placeholder="you@company.com">
+            </div>
+            <div class="auth-field">
+              <label>Password</label>
+              <input class="auth-input" type="password" id="register-password" placeholder="Min 6 characters">
+            </div>
+            <div class="auth-field">
+              <label>Confirm Password</label>
+              <input class="auth-input" type="password" id="register-confirm" placeholder="••••••••" onkeydown="if(event.key==='Enter')handleEmailRegister()">
+            </div>
+            <div id="register-error" class="auth-error" style="display:none"></div>
+            <button class="btn-auth-primary" id="register-btn" onclick="handleEmailRegister()">Create Free Account</button>
+            <div class="auth-switch">
+              Already have an account? <a href="#" onclick="switchToLogin();return false">Sign in</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="landing-nav-inner">
+      <div class="landing-brand">
+        <div class="landing-brand-icon" style="font-size:20px">🤖</div>
+        <span class="landing-brand-name" style="font-size:15px">FinCopilot</span>
+      </div>
+      <span class="footer-copy">&copy; 2026 FinCopilot. AI-powered finance for everyone.</span>
+    </div>
+  </footer>
+
+  <!-- Loading overlay -->
+  <div id="login-loading" class="login-loading" style="display:none">
+    <div class="spinner"></div>
+    <span>Signing you in...</span>
+  </div>
+  <div id="login-error" class="login-error" style="display:none"></div>
+</div>
+
+<!-- ═══ BUSINESS SETUP OVERLAY ═════════════════════════════ -->
+<div id="business-overlay" class="biz-setup-overlay" style="display:none">
+  <div class="biz-setup-particles">
+    <div class="particle p1"></div><div class="particle p2"></div><div class="particle p3"></div>
+  </div>
+  <div class="biz-setup-container">
+    <div class="biz-setup-left">
+      <div class="biz-setup-brand">
+        <span style="font-size:36px">🤖</span>
+        <h2>Welcome to<br><span class="gradient-text">FinCopilot</span></h2>
+      </div>
+      <p class="biz-setup-tagline">Let's set up your business profile so we can personalize your AI-powered financial dashboard.</p>
+      <div class="biz-setup-features">
+        <div class="biz-feature"><span class="biz-feature-icon">📊</span><div><strong>Instant Dashboard</strong><br><span>See revenue, expenses & profit the moment you upload data</span></div></div>
+        <div class="biz-feature"><span class="biz-feature-icon">🤖</span><div><strong>AI Categories</strong><br><span>Our AI automatically classifies every transaction</span></div></div>
+        <div class="biz-feature"><span class="biz-feature-icon">🔮</span><div><strong>Smart Forecasts</strong><br><span>Get cashflow predictions powered by machine learning</span></div></div>
+      </div>
+    </div>
+    <div class="biz-setup-right">
+      <div class="biz-setup-card">
+        <div class="biz-step-indicator">
+          <div class="biz-step active"><span>1</span> Create</div>
+          <div class="biz-step-line"></div>
+          <div class="biz-step"><span>2</span> Upload</div>
+          <div class="biz-step-line"></div>
+          <div class="biz-step"><span>3</span> Insights</div>
+        </div>
+        <h3>Name your business</h3>
+        <p class="biz-setup-hint">This helps us organize your financial data. You can always change it later.</p>
+        <div class="auth-field" style="margin-bottom:20px">
+          <label>Business Name</label>
+          <input class="auth-input" id="business-name-input" type="text" placeholder="e.g. Ali Electric Services" style="font-size:15px">
+        </div>
+        <button class="btn-auth-primary" id="create-business-btn" style="font-size:15px">
+          Create Business & Continue →
+        </button>
+        <div id="business-select-section" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+          <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Or select an existing business</div>
+          <div id="business-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN APP ═══════════════════════════════════════════ -->
+<div id="app-root" style="display:none">
+
+  <!-- ═══ SIDEBAR ═══════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="logo-icon">🤖</div>
+        <button class="sidebar-toggle-btn" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar">✕</button>
+      </div>
+      <h1>AI Co-Pilot</h1>
+      <span>Financial Intelligence</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-section-label">Main</div>
+        <button class="nav-item" data-nav="dashboard" onclick="navigate('dashboard')">
+          <span class="nav-icon">📊</span> Dashboard
+        </button>
+        <button class="nav-item" data-nav="transactions" onclick="navigate('transactions')">
+          <span class="nav-icon">📋</span> Transactions
+        </button>
+        <button class="nav-item" data-nav="insights" onclick="navigate('insights')">
+          <span class="nav-icon">💡</span> AI Insights
+          <span class="nav-badge" id="insight-badge" style="display:none">0</span>
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Intelligence</div>
+        <button class="nav-item" data-nav="forecast" onclick="navigate('forecast')">
+          <span class="nav-icon">🔮</span> Forecast & Health
+        </button>
+        <button class="nav-item" data-nav="goals" onclick="navigate('goals')">
+          <span class="nav-icon">🎯</span> Goals & Scenarios
+        </button>
+        <button class="nav-item" data-nav="chat" onclick="navigate('chat')">
+          <span class="nav-icon">🤖</span> AI CFO Chat
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-section-label">Data</div>
+        <button class="nav-item active" data-nav="upload" onclick="navigate('upload')">
+          <span class="nav-icon">📤</span> Add Data
+        </button>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="health-chip" id="health-chip">
+        <div>
+          <div class="score-num" style="color:var(--text-muted)">—</div>
+          <div style="font-size:10px;color:var(--text-muted)">No data</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted)">Business Health</div>
+      </div>
+      <button class="btn btn-sm btn-secondary" style="width:100%;margin-top:8px" onclick="handleLogout()" id="logout-btn">
+        🚪 Sign Out
+      </button>
+      <div id="user-info" style="margin-top:8px;text-align:center;font-size:11px;color:var(--text-muted)"></div>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div>
+        <button class="hamburger-btn" id="hamburger-btn">☰</button>
+      </div>
+      <div style="flex:1;padding-left:8px">
+        <div class="topbar-title" id="topbar-title">📤 Add Data</div>
+        <div class="topbar-subtitle" id="topbar-sub">Upload CSV or add transactions manually</div>
+      </div>
+      <div class="topbar-actions">
+        <span id="business-name-display" style="font-size:13px;color:var(--accent-light);font-weight:600;margin-right:12px"></span>
+      </div>
+    </div>
+
+    <!-- ─── DASHBOARD PAGE ─────────────────────────────────── -->
+    <div class="page" data-page="dashboard" id="page-dashboard">
+      <div class="empty-state">
+        <div class="empty-state-icon">📊</div>
+        <h3>No Data Yet</h3>
+        <p style="margin-bottom:24px">Upload your transactions to see insights</p>
+        <button class="btn btn-primary btn-lg" onclick="navigate('upload')">📤 Upload Transactions</button>
+      </div>
+    </div>
+
+    <!-- ─── TRANSACTIONS PAGE ──────────────────────────────── -->
+    <div class="page" data-page="transactions" id="page-transactions">
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <h3>No Transactions Yet</h3>
+        <p style="margin-bottom:24px">Upload a CSV or add transactions manually</p>
+        <button class="btn btn-primary btn-lg" onclick="navigate('upload')">📤 Upload Transactions</button>
+      </div>
+    </div>
+
+    <!-- ─── INSIGHTS PAGE ──────────────────────────────────── -->
+    <div class="page" data-page="insights" id="page-insights">
+      <div class="empty-state">
+        <div class="empty-state-icon">💡</div>
+        <h3>No Insights Yet</h3>
+        <p style="margin-bottom:24px">Upload data to generate AI insights</p>
+        <button class="btn btn-primary btn-lg" onclick="navigate('upload')">📤 Upload Transactions</button>
+      </div>
+    </div>
+
+    <!-- ─── FORECAST PAGE ──────────────────────────────────── -->
+    <div class="page" data-page="forecast" id="page-forecast">
+      <div class="empty-state">
+        <div class="empty-state-icon">🔮</div>
+        <h3>No Data for Forecast</h3>
+        <p style="margin-bottom:24px">Upload transactions to see projections</p>
+        <button class="btn btn-primary btn-lg" onclick="navigate('upload')">📤 Upload Transactions</button>
+      </div>
+    </div>
+
+    <!-- ─── GOALS PAGE ─────────────────────────────────────── -->
+    <div class="page" data-page="goals" id="page-goals">
+      <div class="empty-state">
+        <div class="empty-state-icon">🎯</div>
+        <h3>No Data Yet</h3>
+        <p style="margin-bottom:24px">Upload transactions to set goals and run scenarios</p>
+        <button class="btn btn-primary btn-lg" onclick="navigate('upload')">📤 Upload Transactions</button>
+      </div>
+    </div>
+
+    <!-- ─── CHAT PAGE ──────────────────────────────────────── -->
+    <div class="page" data-page="chat" id="page-chat">
+    </div>
+
+    <!-- ─── UPLOAD PAGE ────────────────────────────────────── -->
+    <div class="page active" data-page="upload" id="page-upload">
+      <div class="grid-2" style="gap:24px;max-width:900px">
+
+        <!-- CSV Upload -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">📁 Upload CSV File</div>
+            <span id="tx-count-stat" style="font-size:20px;font-weight:700;color:var(--accent-light)">0</span>
+          </div>
+
+          <div class="upload-zone" id="upload-zone"
+            onclick="document.getElementById('csv-file-input').click()"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave()"
+            ondrop="handleDrop(event)">
+            <div class="upload-icon">📂</div>
+            <h3>Drop your CSV here</h3>
+            <p>or click to browse files</p>
+            <button class="btn btn-primary" onclick="event.stopPropagation();document.getElementById('csv-file-input').click()">
+              Choose File
+            </button>
+            <input type="file" id="csv-file-input" accept=".csv,.txt" style="display:none">
+          </div>
+
+          <div id="upload-progress" style="display:none;margin-top:16px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="spinner"></div>
+              <span style="font-size:13px;color:var(--accent-light)" id="upload-status">Processing with AI...</span>
+            </div>
+            <div class="progress-bar" style="margin-top:8px">
+              <div class="progress-fill" id="upload-progress-bar" style="width:0%;background:var(--gradient-2)"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding:16px;background:rgba(255,255,255,0.02);border-radius:var(--radius-md);border:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px">Required CSV Format</div>
+            <div style="font-family:'JetBrains Mono','Fira Code',monospace;font-size:11.5px;color:#22d3ee;line-height:1.8;white-space:pre">Date,Description,PaymentMethod,Amount
+2026-01-05,Payment from Ali Electric,Bank Transfer,12000
+2026-01-06,Shell Petrol,Cash,-3500
+2026-01-08,Purchase from Metro Tools,Credit Card,-4200</div>
+            <div style="margin-top:10px;font-size:11px;color:var(--text-muted)">
+              ✅ Positive = Money In &nbsp;&nbsp; ❌ Negative = Money Out<br>
+              PaymentMethod column is optional
+            </div>
+          </div>
+        </div>
+
+        <!-- Manual Entry -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">✏️ Add Transaction Manually</div>
+          </div>
+
+          <form id="manual-form" onsubmit="addManualTransaction(event)">
+            <div class="form-group">
+              <label class="form-label">Date *</label>
+              <input class="form-input" type="date" id="mt-date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description *</label>
+              <input class="form-input" type="text" id="mt-desc" placeholder="e.g. Payment from Ali Electric" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Amount * <span style="font-size:11px;color:var(--text-muted)">(negative for expenses)</span></label>
+              <input class="form-input" type="number" id="mt-amount" placeholder="e.g. 12000 or -3500" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Method</label>
+              <select class="form-select" id="mt-method">
+                <option value="">Select...</option>
+                <option value="Cash">Cash</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cheque">Cheque</option>
+                <option value="Mobile Payment">Mobile Payment</option>
+                <option value="Credit Card">Credit Card</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success" style="width:100%">
+              ➕ Add Transaction
+            </button>
+          </form>
+
+          <!-- Processing indicator for manual add -->
+          <div id="manual-processing" style="display:none;margin-top:12px;align-items:center;gap:10px">
+            <div class="spinner"></div>
+            <span style="font-size:13px;color:var(--accent-light)">🤖 AI is classifying your transaction...</span>
+          </div>
+
+          <!-- Quick Stats -->
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px">Current Data</div>
+            <div class="grid-2" style="gap:8px">
+              <div style="text-align:center;padding:10px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md)">
+                <div style="font-size:20px;font-weight:700;color:var(--accent-light)" id="upload-tx-count">0</div>
+                <div style="font-size:11px;color:var(--text-muted)">Transactions</div>
+              </div>
+              <div style="text-align:center;padding:10px;background:rgba(255,255,255,0.03);border-radius:var(--radius-md)">
+                <div style="font-size:20px;font-weight:700;color:var(--success)" id="upload-insight-count">0</div>
+                <div style="font-size:11px;color:var(--text-muted)">Insights</div>
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="navigate('dashboard')" id="view-dashboard-btn">
+              📊 View Dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips section -->
+      <div style="max-width:900px;margin-top:24px">
+        <div class="exec-summary">
+          <div class="exec-summary-label">🚀 Get Started</div>
+          <div class="exec-summary-text">
+            Upload your transaction CSV or add entries manually. The AI will automatically classify categories,
+            extract customer/supplier names, detect patterns, and generate personalized business insights
+            — no accounting knowledge required.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Scripts -->
+<script src="/static/api.js"></script>
+<script src="/static/engine.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>
