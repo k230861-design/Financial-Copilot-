@@ -10,7 +10,7 @@ SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY")
 SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-120b")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://fincopilot-three.vercel.app")
 
 # Supabase JWT settings
 SUPABASE_JWT_SECRET = os.getenv("SUPABASE_JWT_SECRET", "")
