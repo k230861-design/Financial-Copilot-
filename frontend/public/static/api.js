@@ -4,10 +4,9 @@
    ══════════════════════════════════════════════════════════ */
 
 // Auto-detect API base: localhost → dev backend, otherwise → Railway production URL
-// After deploying the backend to Railway, replace YOUR_RAILWAY_URL below with your actual Railway domain.
 const API_BASE = window.location.hostname === 'localhost'
   ? 'http://localhost:8000'
-  : 'financial-copilot-production.up.railway.app';
+  : 'https://financial-copilot-production.up.railway.app';
 
 const SUPABASE_URL = 'https://zgvrxemqivsojaqkukwu.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpndnJ4ZW1xaXZzb2phcWt1a3d1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxNzk5MTAsImV4cCI6MjA4Nzc1NTkxMH0.7Xl2Wghmtyn-v5_y-JM78SgGrwS-jpCReavd0kTFhnc';
